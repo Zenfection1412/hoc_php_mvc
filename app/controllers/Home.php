@@ -1,23 +1,23 @@
 <?php
 
-class Home{
-    function __construct(){
-        
+class Home extends Controller {
+    public $model;
+    public function __construct(){
+        $this->model = $this->models('HomeModel');
     }
 
     public function index(){
-        echo 'Trang chủ';
-    }
-    
-    public function detail($id = '', $slug = ''){
-        echo "Id sản phẩm: " . $id;
-        echo "<br>";
-        echo "Slug sản phẩm: " . $slug;
+        $data = $this->model->getList();
+        echo '<pre>';
+        print_r($data);
+        echo '</pre>';
+
+        $detail = $this->model->getDetail(0);
+        echo '<pre>';
+        print_r($detail);   
+        echo '</pre>';
     }
 
-    public function search(){
-        $keyword = $_GET('keyword');
-        echo "Search = " . $keyword;
-    }
+    
 }
 ?>
