@@ -1,16 +1,29 @@
 <?php
 
 class Product extends Controller{
+    public $data = [];
     function __construct(){
-        $this->model = $this->models('ProductModel');
+        $product = $this->models('ProductModel');
     }
-    
     public function index(){
-        echo 'Danh sách sản phẩm';
-        $data = $this->model->getProductList();
-        echo '<pre>';
-        print_r($data);
-        echo '</pre>';
+        
+    }   
+    
+    public function lists(){
+        $product = $this->models('ProductModel');
+        $data = $product->getProductList();
+
+        $title = 'Danh sách sản phẩm';
+
+        $this->data['product_list'] = $data;
+        $this->data['page_title'] = $title;
+
+        $this->render('products/lists', $this->data);
+    }
+    public function detail($id = 0){
+        $product = $this->models('ProductModel');
+        $this->data['info'] = $product->getDetail($id);
+        $this->render('products/detail', $this->data);
     }
 }
 ?>
