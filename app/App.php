@@ -62,6 +62,11 @@ class App{
         } else {
             $this->__controller = ucfirst($this->__controller);
         }
+
+        if(empty($fileCheck)){
+            $fileCheck = $this->__controller;
+        }
+
         if(file_exists('app/controllers/' . $fileCheck . '.php')){
             require_once 'app/controllers/' . $fileCheck . '.php';
             
