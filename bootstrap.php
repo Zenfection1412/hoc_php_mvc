@@ -12,6 +12,7 @@ if(!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_
 define('_WEB_ROOT', $web_root);
 
 require_once 'configs/routes.php';
+require_once 'core/Route.php';
 require_once 'app/App.php';
 require_once 'core/Controller.php';
 ?>
