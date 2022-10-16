@@ -1,10 +1,5 @@
 <h1>Danh sách sản phẩm</h1>
+<br>
 <?php
-echo '<pre>';
-print_r($product_list);
-echo '</pre>';
-
-echo '<pre>';
-print_r($page_title);
-echo '</pre>';
+    echo $page_title;
 ?>
