@@ -12,10 +12,10 @@ class Home extends Controller {
         print_r($data);
         echo '</pre>';
 
-        $detail = $this->model->getDetail(0);
-        echo '<pre>';
-        print_r($detail);   
-        echo '</pre>';
+        // $detail = $this->model->getDetail(0);
+        // echo '<pre>';
+        // print_r($detail);   
+        // echo '</pre>';
     }
 
     

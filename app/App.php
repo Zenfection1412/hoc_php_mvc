@@ -8,6 +8,7 @@ class App{
 
     function __construct(){
         global $routes;
+        global $config;
 
         $this->__routes = new Route();
 
