@@ -64,13 +64,23 @@ class Database{
         return false;
     }
     function query($sql){
-        $stmt = $this->__conn->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        try {
+            $stmt = $this->__conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            $data = array(
+                'status' => 'error',
+                'message' => $e->getMessage()
+            );
+            App::$app->loadError('database', $data);
+            die();
+        }
     }
 
     function lastInsertId(){
         return $this->__conn->lastInsertId();
+        
     }
 }
 ?>

@@ -15,7 +15,10 @@ class Connection{
             $con = new PDO($dsn, $config['user'], $config['pass'], $options);
             self::$conn = $con;
         } catch (Exception $e) {
-            echo $e->getMessage();
+            $data = [
+                'message' => $e->getMessage()
+            ];
+            App::$app->loadError('database', $data);
         }
     }
 

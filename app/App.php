@@ -6,9 +6,13 @@ class App{
     private $__params;
     private $__routes;
 
-    function __construct(){
+    public static $app;
+
+    public function __construct(){
         global $routes;
         global $config;
+
+        self::$app = $this;
 
         $this->__routes = new Route();
 
@@ -99,7 +103,8 @@ class App{
         }
     }
 
-    public function loadError($name = '404'){
+    public function loadError($name = '404', $data = []){
+        extract($data);
         require_once 'error/' . $name . '.php';
     }
 }

@@ -4,14 +4,22 @@
  * 
  */
 class HomeModel extends Model{
-    protected $_table = 'tb_product';
+    private $__table = 'tb_product';
 
     function __construct(){
         parent::__construct();
     }
 
+    function tableFill(){
+        return 'tb_product';
+    }
+
+    function fieldFill(){
+        return '*';
+    }
+
     public function getList(){
-        $data = $this->db->query("SELECT * FROM $this->_table");
+        $data = $this->db->query("SELECT * FROM $this->__table");
         return $data;
     }
     public function getDetail($id){

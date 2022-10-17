@@ -1,13 +1,14 @@
 <?php
 
 class Home extends Controller {
-    public $model;
+    public $tb_product;
     public function __construct(){
-        $this->model = $this->models('HomeModel');
+        $this->tb_product = $this->models('HomeModel');
     }
 
     public function index(){
-        $data = $this->model->getList();
+        $data = $this->tb_product->count();
+        // $data = $this->model->getList();
         echo '<pre>';
         print_r($data);
         echo '</pre>';
