@@ -84,7 +84,9 @@ class App{
             if(class_exists($this->__controller)){
                 $this->__controller = new $this->__controller();
                 unset($urlArr[0]);
-                $this->__controller->db = $this->__db;
+                if(!empty($this->__db)){
+                    $this->__controller->db = $this->__db;
+                }
             } else {
                 die('Class ' . $this->__controller . ' không tồn tại');
             }
