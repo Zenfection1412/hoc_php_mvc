@@ -3,18 +3,25 @@
 class Database{
     private $__conn;
 
+    use QueryBuilder;
+
     function __construct(){
         global $dbconfig;
         $this->__conn = Connection::getInstance($dbconfig);
     }
 
-    function insert($table, $data){
+    function insertData($table, $data){
         if(!empty($data)){
             $fieldStr = '';
             $valueStr = '';
             foreach($data as $key => $value){
                 $fieldStr .= $key . ',';
-                $valueStr .= ':' . $value . ',';
+                // check string
+                if(is_string($value)){
+                    $valueStr .= "'" . $value . "',";
+                } else {
+                    $valueStr .= $value . ',';
+                }
             }
             $fieldStr = rtrim($fieldStr, ',');
             $valueStr = rtrim($valueStr, ',');
@@ -29,7 +36,7 @@ class Database{
         return false;
     }
 
-    function update($table, $data, $condition = ''){ 
+    function updateData($table, $data, $condition = ''){ 
         if(!empty($data)){
             $updateStr = '';
             foreach($data as $key => $value){
@@ -51,7 +58,7 @@ class Database{
         return false;
     }
 
-    function delete($table, $condition = ''){
+    function deleteData($table, $condition = ''){
         if(!empty($condition)){
             $sql = "DELETE FROM $table WHERE $condition";
         } else {
@@ -63,11 +70,12 @@ class Database{
         }
         return false;
     }
+
     function query($sql){
         try {
             $stmt = $this->__conn->prepare($sql);
             $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $stmt;
         } catch (Exception $e) {
             $data = array(
                 'status' => 'error',
@@ -77,10 +85,14 @@ class Database{
             die();
         }
     }
-
+    function count(){
+        $sql = "SELECT COUNT(*) FROM $this->tableName $this->innerJoin $this->where";
+        $sql = trim($sql);
+        $data = $this->query($sql)->fetchColumn();
+        return $data;
+    }
     function lastInsertId(){
         return $this->__conn->lastInsertId();
-        
     }
 }
 ?>

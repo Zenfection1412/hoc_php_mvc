@@ -29,7 +29,9 @@ if(!empty($config['database'])){
     $dbconfig = array_filter($config['database']);
     if(!empty($dbconfig)){
         require_once 'core/Connection.php'; // Xử lý kết nối database
+        require_once 'core/QueryBuilder.php'; // Xử lý query builder
         require_once 'core/Database.php'; // Xử lý database
+        require_once 'core/DB.php'; // Xử lý DB
     }
 }
 require_once 'core/Model.php'; // Base model

@@ -11,7 +11,7 @@ abstract class Model extends Database{
     abstract function tableFill();
     abstract function fieldFill();
 
-    public function fetchAll(){
+    public function get(){
         $tableName = $this->tableFill();
         $field = $this->fieldFill();
         if(empty($tableName) || empty($field)){

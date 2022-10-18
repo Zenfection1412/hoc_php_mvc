@@ -18,13 +18,21 @@ class HomeModel extends Model{
         return '*';
     }
 
-    public function getList(){
-        $data = $this->db->query("SELECT * FROM $this->__table");
+    public function getListProduct(){
+        $data = $this->db->table($this->__table)->where('price', '>', 2)->where('discount', '>', '10')->orderBy('id_product')->get();
         return $data;
     }
-    public function getDetail($id){
-        $data = ['item1', 'item2', 'item3'];
-        return $data[$id];
+    public function insertProduct($data){
+        $this->db->table($this->__table)->insert($data);
     }
+
+    public function deleteProductID($id){
+        $this->db->table($this->__table)->where('id_product', '=', $id)->delete();
+    }
+    public function test(){
+        $data = $this->db->table($this->__table)->count();
+        return $data;
+    }
+
 }
 ?>

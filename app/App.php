@@ -5,6 +5,7 @@ class App{
     private $__action;
     private $__params;
     private $__routes;
+    private $__db;
 
     public static $app;
 
@@ -21,6 +22,11 @@ class App{
         }
         $this->__action = 'index';
         $this->__params = array();
+
+        if(class_exists('DB')){
+            $dbObject = new DB();
+            $this->__db = $dbObject->db;
+        }
 
         $this->handleUrl();
     }
@@ -74,14 +80,14 @@ class App{
 
         if(file_exists('app/controllers/' . $fileCheck . '.php')){
             require_once 'app/controllers/' . $fileCheck . '.php';
-            
+
             if(class_exists($this->__controller)){
                 $this->__controller = new $this->__controller();
+                unset($urlArr[0]);
+                $this->__controller->db = $this->__db;
             } else {
                 die('Class ' . $this->__controller . ' không tồn tại');
             }
-
-            unset($urlArr[0]);
         } else {
             $this->loadError();
         }
