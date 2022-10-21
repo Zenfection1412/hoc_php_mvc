@@ -36,4 +36,6 @@ if(!empty($config['database'])){
 }
 require_once 'core/Model.php'; // Base model
 require_once 'core/Controller.php'; // Xử lý controller
+require_once 'core/Request.php'; // Xử lý request
+require_once 'core/Response.php'; // Xử lý response
 ?>
