@@ -11,7 +11,7 @@ if(!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_
 
 define('_WEB_ROOT', $web_root);
 
-/**Tự động Load Config */
+//* Tự động Load Config
 $config_dir = scandir('configs');
 if(!empty($config_dir)){
     foreach($config_dir as $file){
@@ -35,6 +35,19 @@ if(!empty($config['database'])){
         require_once 'core/DB.php'; // Xử lý DB
     }
 }
+
+//* Load all helpers
+require_once 'core/Helper.php'; // Xử lý helper
+
+$helper_dir = scandir('app/helpers');
+if(!empty($helper_dir)){
+    foreach($helper_dir as $file){
+        if($file != '.' && $file != '..' && file_exists('app/helpers/' . $file)){
+            require_once 'app/helpers/' . $file;
+        }
+    }
+}
+
 require_once 'core/Model.php'; // Base model
 require_once 'core/Controller.php'; // Xử lý controller
 require_once 'core/Request.php'; // Xử lý request

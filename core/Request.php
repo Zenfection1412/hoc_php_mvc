@@ -137,6 +137,11 @@ class Request {
                 }
             }
         }
+        
+        $sessionKey = Session::isValid();
+        Session::flash($sessionKey . '_errors', $this->errors());
+        Session::flash($sessionKey . '_old', $this->getField());
+
         return $checkValidate;
     }
     

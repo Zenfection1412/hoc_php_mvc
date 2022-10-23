@@ -12,9 +12,7 @@ class Home extends Controller {
         //Session::data('username');
     }
     public function get_user(){
-        $this->data['errors']  = Session::flash('errors');
         $this->data['msg'] = Session::flash('msg');
-        $this->data['oldValue'] = Session::flash('oldValue'); 
         $this->render('users/add', $this->data);
     }
 
@@ -50,9 +48,7 @@ class Home extends Controller {
 
             $validate = $request->validate();
             if(!$validate){
-                Session::flash('errors', $request->errors());
                 Session::flash('msg', 'Đã có lỗi xảy ra, vui lòng kiểm tra lại');
-                Session::flash('oldValue', $request->getField());
             } 
             
         } 
