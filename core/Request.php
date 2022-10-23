@@ -3,8 +3,12 @@
 class Request {
     private $__rules = array();
     private $__message = array();
-    public $errors = array();
+    private $__errors = array();
+    public $db;
 
+    public function __construct(){
+        $this->db = new Database();
+    }
     public function getMethod(){
         return strtolower($_SERVER['REQUEST_METHOD']);
     }
@@ -49,8 +53,9 @@ class Request {
         $this->__message = $message;
     }
     public function setError($fieldName, $ruleName){
-        $this->errors[$fieldName][$ruleName] = $this->__message[$fieldName. '.' . $ruleName];
+        $this->__errors[$fieldName][$ruleName] = $this->__message[$fieldName. '.' . $ruleName];
     }
+
     public function validate(){
         $checkValidate = true;
         $this->__rules = array_filter($this->__rules);
@@ -100,6 +105,35 @@ class Request {
                             $checkValidate = false;
                         }
                     }
+                    if($ruleName == 'unique'){
+                        $tableName = null;
+                        $fieldUnique = null;
+                        if(!empty($ruleArr[1])) $tableName = $ruleArr[1];
+                        if(!empty($ruleArr[2])) $fieldUnique = $ruleArr[2];
+                        if(!empty($tableName) && !empty($fieldName)){
+                            $checkExist = $this->db->table($tableName)->where($fieldName, '=', $dataField[$fieldName])->count();
+                            if(!empty($checkExist)){
+                                $this->setError($fieldName, $ruleName);
+                                $checkValidate = false;
+                            }
+                        }
+                    }
+
+                    // callback_validate
+                    if(preg_match('~^callback_(.+)~is', $ruleName, $callbackArr)){
+                        if(!empty($callbackArr[1])){
+                            $callbackName = $callbackArr[1];
+                            $controller = App::$app->getCurrentController();
+                            if(method_exists($controller, $callbackName)){
+                                $checkCallBack = call_user_func_array([$controller, $callbackName], [trim($dataField[$fieldName])]);
+                                if(!$checkCallBack){
+                                    $this->setError($fieldName, $ruleName);
+                                    $checkValidate = false;
+                                }
+                            }
+
+                        }
+                    }
                 }
             }
         }
@@ -107,15 +141,15 @@ class Request {
     }
     
     public function errors($fieldName = ''){
-        if(!empty($this->errors)){
+        if(!empty($this->__errors)){
             if(empty($fieldName)){
                 $errorArr = array();
-                foreach($this->errors as $key => $value){
+                foreach($this->__errors as $key => $value){
                     $errorArr[$key] = reset($value); 
                 }
                 return $errorArr;
             } 
-            return reset($this->errors[$fieldName]);
+            return reset($this->__errors[$fieldName]);
         }
         return false;
     }

@@ -28,6 +28,8 @@ class App{
             $this->__db = $dbObject->db;
         }
 
+        
+
         $this->handleUrl();
     }
 
@@ -114,5 +116,8 @@ class App{
     public function loadError($name = '404', $data = []){
         extract($data);
         require_once 'error/' . $name . '.php';
+    }
+    public function getCurrentController(){
+        return $this->__controller;
     }
 }

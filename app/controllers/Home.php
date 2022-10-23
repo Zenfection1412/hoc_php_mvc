@@ -22,15 +22,17 @@ class Home extends Controller {
         echo '</pre>';
         $this->render('users/add');
     }
+
     public function post_user(){
         $request = new Request();
         if($request->isPost()){
             //set rules
             $request->rules([
                 'fullname' => 'required|min:5|max:50',
-                'email' => 'required|email|min:6',
+                'email' => 'required|email|min:6|unique:tb_user:email',
                 'password' => 'required|min:3',
-                'confirm_password' => 'required|min:3|match:password'
+                'confirm_password' => 'required|min:3|match:password',
+                'age' => 'require|callback_check_age'
             ]);
 
             //set message
@@ -41,11 +43,14 @@ class Home extends Controller {
                 'email.required' => 'Email không được để trống',
                 'email.email' => 'Email không đúng định dạng',
                 'email.min' => 'Email phải có ít nhất 6 ký tự',
+                'email.unique' => 'Email đã tồn tại trong hệ thống',
                 'password.required' => 'Mật khẩu không được để trống',
                 'password.min' => 'Mật khẩu phải có ít nhất 3 ký tự',
                 'confirm_password.required' => 'Nhập lại mật khẩu không được để trống',
                 'confirm_password.min' => 'Nhập lại mật khẩu phải có ít nhất 3 ký tự',
-                'confirm_password.match' => 'Nhập lại mật khẩu không khớp'
+                'confirm_password.match' => 'Nhập lại mật khẩu không khớp',
+                'age.required' => 'Tuổi không được để trống',
+                'age.callback_check_age' => 'Tuổi phải từ 18 đến 100'
             ]);
 
             $validate = $request->validate();
@@ -55,9 +60,14 @@ class Home extends Controller {
                 $this->data['oldValue'] = $request->getField();
             } 
             $this->render('users/add', $this->data);
-            } else{
-                $response = new Response();
-                $response->redirect('home/get_user');
-            }
+        } else{
+            $response = new Response();
+            $response->redirect('home/get_user');
         }
+    }
+    
+    public function check_age($age){
+        if($age < 18 || $age > 100) return false;
+        return true;
+    }
 }

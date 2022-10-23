@@ -23,6 +23,18 @@
     </div>
 
     <div>
+        <input type="text" class="" name="age" placeholder="Tuổi..." value="<?php if(!empty($oldValue['age'])){
+                echo $oldValue['age'];
+            }
+        ?>"><br>
+        <?php
+            if(!empty($errors) && array_key_exists('age', $errors)){
+                echo '<span style="color:red">' . $errors['age'] . '</span>';
+            } 
+        ?>
+    </div>
+
+    <div>
         <input type="password" class="" name="password" placeholder="Mật khẩu..."><br>
         <?php
             if(!empty($errors) && array_key_exists('password', $errors)){
