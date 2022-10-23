@@ -9,18 +9,13 @@ class Home extends Controller {
 
     public function index(){
         //$data = $this->tb_product->getProduct();
-        $data = $this->db->table('tb_product')->get();
-        echo '<pre>';
-        print_r($data);
-        echo '</pre>';
+        //Session::data('username');
     }
     public function get_user(){
-        $request = new Request();
-        $data = $request->getField();
-        echo '<pre>';
-        print_r($data);
-        echo '</pre>';
-        $this->render('users/add');
+        $this->data['errors']  = Session::flash('errors');
+        $this->data['msg'] = Session::flash('msg');
+        $this->data['oldValue'] = Session::flash('oldValue'); 
+        $this->render('users/add', $this->data);
     }
 
     public function post_user(){
@@ -55,15 +50,14 @@ class Home extends Controller {
 
             $validate = $request->validate();
             if(!$validate){
-                $this->data['errors'] = $request->errors();
-                $this->data['msg'] = 'Đã có lỗi xảy ra, vui lòng kiểm tra lại';
-                $this->data['oldValue'] = $request->getField();
+                Session::flash('errors', $request->errors());
+                Session::flash('msg', 'Đã có lỗi xảy ra, vui lòng kiểm tra lại');
+                Session::flash('oldValue', $request->getField());
             } 
-            $this->render('users/add', $this->data);
-        } else{
-            $response = new Response();
-            $response->redirect('home/get_user');
-        }
+            
+        } 
+        $response = new Response();
+        $response->redirect('home/get_user');
     }
     
     public function check_age($age){

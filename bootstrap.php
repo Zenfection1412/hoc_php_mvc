@@ -22,6 +22,7 @@ if(!empty($config_dir)){
 }
 
 require_once 'core/Route.php'; // Xử lý route
+require_once 'core/Session.php'; // Xử lý session
 require_once 'app/App.php'; // Xử lý app
 
 /** Kiểm tra config và load database*/
