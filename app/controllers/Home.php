@@ -8,8 +8,7 @@ class Home extends Controller {
     }
 
     public function index(){
-        //$data = $this->tb_product->getProduct();
-        //Session::data('username');
+        
     }
     public function get_user(){
         $this->data['msg'] = Session::flash('msg');

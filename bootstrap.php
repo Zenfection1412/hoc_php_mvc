@@ -21,11 +21,21 @@ if(!empty($config_dir)){
     }
 }
 
+//* Load all services
+if(!empty($config['app']['service'])){
+    foreach($config['app']['service'] as $service){
+        if(file_exists('app/core/' . $service . '.php')){
+            require_once 'app/core/' . $service . '.php';
+        }
+    }
+}
+
+
 require_once 'core/Route.php'; // Xử lý route
 require_once 'core/Session.php'; // Xử lý session
 require_once 'app/App.php'; // Xử lý app
 
-/** Kiểm tra config và load database*/
+//* Kiểm tra config và load database
 if(!empty($config['database'])){
     $dbconfig = array_filter($config['database']);
     if(!empty($dbconfig)){
@@ -35,6 +45,7 @@ if(!empty($config['database'])){
         require_once 'core/DB.php'; // Xử lý DB
     }
 }
+
 
 //* Load all helpers
 require_once 'core/Helper.php'; // Xử lý helper
@@ -47,6 +58,7 @@ if(!empty($helper_dir)){
         }
     }
 }
+
 
 require_once 'core/Model.php'; // Base model
 require_once 'core/Controller.php'; // Xử lý controller
