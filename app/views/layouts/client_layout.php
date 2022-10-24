@@ -6,7 +6,7 @@
     </head>
     <body>
         <?php
-            $this->render('blocks/header');
+            $this->render('blocks/header', $sub_content);
             $this->render($content, $sub_content);
             $this->render('blocks/footer');
         ?>

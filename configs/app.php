@@ -9,5 +9,8 @@
         'globalMiddleWare' => [
             ParamsMiddleWare::class,
         ],
+        'boot' => [
+            AppServiceProvider::class,
+        ],
     ];
 ?>

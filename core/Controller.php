@@ -17,6 +17,9 @@ class Controller {
 
     public function render($view, $data = []){
         extract($data);
+        if(!empty(View::$dataShare)){
+            $data = array_merge($data, View::$dataShare);
+        }
         if(file_exists(_DIR_ROOT . '/app/views/' . $view . '.php')){
             require_once _DIR_ROOT . '/app/views/' . $view . '.php';
         } else {

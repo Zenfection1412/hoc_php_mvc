@@ -30,6 +30,8 @@ if(!empty($config['app']['service'])){
     }
 }
 
+require_once 'core/ServiceProvider.php'; // Load ServiceProvider
+require_once 'core/View.php'; // Load View Class
 require_once 'core/Load.php'; // 
 require_once 'core/MiddleWare.php'; // Load MiddleWare
 require_once 'core/Route.php'; // Xử lý route

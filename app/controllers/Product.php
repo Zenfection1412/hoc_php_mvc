@@ -19,7 +19,10 @@ class Product extends Controller{
         $this->data['sub_content']['page_title'] = $title;
         $this->data['page_title'] = $title;
         $this->data['content'] = 'products/lists';
-
+        $this->data['sub_content']['userInfo'] = [
+            'fullname' => 'Lê Tuấn Kiệt',
+        ];
+        
         $this->render('layouts/client_layout', $this->data);
     }
 

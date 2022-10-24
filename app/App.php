@@ -52,6 +52,9 @@ class App{
         $this->handleGlobalMiddleWare($this->__db);
         $this->handleRouteMiddleWare($keyRoute, $this->__db);
         
+        // App Service Provider
+        $this->handleAppServiceProvider($this->__db);
+        
         // Kiểm tra nào là file
         $urlCheck = '';
         if(!empty($urlArr)){
@@ -153,6 +156,23 @@ class App{
                             $middleWareObject->db = $db;
                         }
                         $middleWareObject->handle();
+                    }
+                }
+            }
+        }
+    }
+    public function handleAppServiceProvider($db){
+        global $config;
+        if(!empty($config['app']['boot'])){
+            foreach($config['app']['boot'] as $key => $serviceProvider){
+                if(file_exists('app/core/' . $serviceProvider . '.php')){
+                    require_once 'app/core/' . $serviceProvider . '.php';
+                    if(class_exists($serviceProvider)){
+                        $serviceProviderObject = new $serviceProvider();
+                        if(!empty($db)){
+                            $serviceProviderObject->db = $db;
+                        }
+                        $serviceProviderObject->boot();
                     }
                 }
             }
