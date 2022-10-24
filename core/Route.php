@@ -1,6 +1,8 @@
 <?php
 
 class Route{
+    private $__keyRoute = '';
+
     function handleRoute($url){
         global $routes;
         unset($routes['default_controller']);
@@ -13,19 +15,25 @@ class Route{
         $handleUrl = $url;
 
         if(!empty($routes)){
-            foreach($routes as $key => $value){
-                $key = trim($key, '/');
-                $key = preg_replace('/\//', '\/', $key);
-                $key = preg_replace('/\(:any\)/', '(.*)', $key);
-                $key = preg_replace('/\(:num\)/', '([0-9]+)', $key);
-                $key = '/^' . $key . '$/';
-                if(preg_match($key, $url)){
-                    $handleUrl = preg_replace($key, $value, $url);
+            foreach($routes as $key => $route){
+                if(preg_match('~'.$key.'~is', $url)){
+                    $handleUrl = preg_replace('~'.$key.'~is', $route, $url);
+                    $this->__keyRoute = $key;
                     break;
                 }
             }
         }
         return $handleUrl;
+    }
+
+    public function getUri(){
+        return $this->__keyRoute;
+    }
+
+    static public function getFullUrl(){
+        $uri = App::$app->getUrl();
+        $url = _WEB_ROOT . $uri;
+        return $url;
     }
 }
 ?>

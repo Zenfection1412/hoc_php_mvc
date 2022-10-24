@@ -20,6 +20,7 @@ class App{
         if(!empty($routes['default_controller'])){
             $this->__controller = $routes['default_controller'];
         }
+
         $this->__action = 'index';
         $this->__params = array();
 
@@ -28,13 +29,10 @@ class App{
             $this->__db = $dbObject->db;
         }
 
-        
-
         $this->handleUrl();
     }
 
     public function getUrl(){
-
         if(!empty($_SERVER["REQUEST_URI"])){
             $url = $_SERVER["REQUEST_URI"];
         } else {
@@ -48,6 +46,11 @@ class App{
         $urlArr = array_values($urlArr);
         
         $url = $this->__routes->handleRoute($url);
+
+        // MiddleWare App
+        $keyRoute = $this->__routes->getUri();
+        $this->handleGlobalMiddleWare($this->__db);
+        $this->handleRouteMiddleWare($keyRoute, $this->__db);
         
         // Kiểm tra nào là file
         $urlCheck = '';
@@ -119,5 +122,40 @@ class App{
     }
     public function getCurrentController(){
         return $this->__controller;
+    }
+
+    public function handleRouteMiddleWare($keyRoute, $db){
+        global $config;
+        if(!empty($config['app']['routeMiddleWare'])){
+            foreach($config['app']['routeMiddleWare'] as $key => $middleware){
+                if(trim($keyRoute) == trim($key) && file_exists('app/middlewares/' . $middleware . '.php')){
+                    require_once 'app/middlewares/' . $middleware . '.php';
+                    if(class_exists($middleware)){
+                        $middleWareObject = new $middleware();
+                        if(!empty($db)){
+                            $middleWareObject->db = $db;
+                        }
+                        $middleWareObject->handle();
+                    }
+                }
+            }
+        }
+    }
+    public function handleGlobalMiddleWare($db){
+        global $config; 
+        if(!empty($config['app']['globalMiddleWare'])){
+            foreach($config['app']['globalMiddleWare'] as $key => $middleware){
+                if(file_exists('app/middlewares/' . $middleware . '.php')){
+                    require_once 'app/middlewares/' . $middleware . '.php';
+                    if(class_exists($middleware)){
+                        $middleWareObject = new $middleware();
+                        if(!empty($db)){
+                            $middleWareObject->db = $db;
+                        }
+                        $middleWareObject->handle();
+                    }
+                }
+            }
+        }
     }
 }

@@ -30,10 +30,10 @@ if(!empty($config['app']['service'])){
     }
 }
 
-
+require_once 'core/Load.php'; // 
+require_once 'core/MiddleWare.php'; // Load MiddleWare
 require_once 'core/Route.php'; // Xử lý route
 require_once 'core/Session.php'; // Xử lý session
-require_once 'app/App.php'; // Xử lý app
 
 //* Kiểm tra config và load database
 if(!empty($config['database'])){
@@ -46,9 +46,10 @@ if(!empty($config['database'])){
     }
 }
 
-
 //* Load all helpers
 require_once 'core/Helper.php'; // Xử lý helper
+
+require_once 'app/App.php'; // Xử lý app
 
 $helper_dir = scandir('app/helpers');
 if(!empty($helper_dir)){
