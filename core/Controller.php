@@ -16,14 +16,28 @@ class Controller {
     }
 
     public function render($view, $data = []){
-        extract($data);
         if(!empty(View::$dataShare)){
             $data = array_merge($data, View::$dataShare);
         }
-        if(file_exists(_DIR_ROOT . '/app/views/' . $view . '.php')){
+
+        extract($data);
+
+        // ob_start();
+        // if(file_exists(_DIR_ROOT . '/app/views/' . $view . '.php')){
+        //     require_once _DIR_ROOT . '/app/views/' . $view . '.php';
+        // } else {
+        //     die('View ' . $view . ' không tồn tại');
+        // }
+        // $contentView = ob_get_contents();
+        // ob_end_clean();
+
+        $contentView = null;
+        if(preg_match('~^layout~', $view) && file_exists(_DIR_ROOT . '/app/views/' . $view . '.php')){
             require_once _DIR_ROOT . '/app/views/' . $view . '.php';
         } else {
-            die('View ' . $view . ' không tồn tại');
+            $contentView = file_get_contents(_DIR_ROOT . '/app/views/' . $view . '.php');
+            $template = new Template();
+            $template->run($contentView, $data);
         }
     }
 }

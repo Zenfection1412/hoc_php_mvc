@@ -9,6 +9,9 @@ if(!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_
     $web_root = 'http://' . $_SERVER['HTTP_HOST'];
 }
 
+// $dirRoot = str_replace('\\', '/', _DIR_ROOT);
+// $documentRoot = str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT']);
+
 define('_WEB_ROOT', $web_root);
 
 //* Tự động Load Config
@@ -64,6 +67,7 @@ if(!empty($helper_dir)){
 
 
 require_once 'core/Model.php'; // Base model
+require_once 'core/Template.php'; // Xử lý template
 require_once 'core/Controller.php'; // Xử lý controller
 require_once 'core/Request.php'; // Xử lý request
 require_once 'core/Response.php'; // Xử lý response
